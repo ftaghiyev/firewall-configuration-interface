@@ -10,16 +10,24 @@ import {
 } from "../ui/dropdown-menu";
 import AskContextDialog from "./ask-context-dialog";
 
-function AdditionDropdown() {
+type AdditionDropdownProps = {
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  children?: React.ReactNode;
+};
+
+function AdditionDropdown({ open, setOpen, children }: AdditionDropdownProps) {
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="self-end">
-          <LuPlus className="size-5" />
-        </Button>
+        {children ?? (
+          <Button variant="ghost" size="icon" className="self-end">
+            <LuPlus className="size-5" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Addition Options Here</DropdownMenuLabel>
+        <DropdownMenuLabel>Options</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <AskContextDialog />

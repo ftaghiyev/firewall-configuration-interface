@@ -1,6 +1,5 @@
 import AdditionDropdown from "@/components/chat/addition-dropdown";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   ResizableHandle,
@@ -9,9 +8,10 @@ import {
 } from "@/components/ui/resizable";
 import { Textarea } from "@/components/ui/textarea";
 import { confirmPolicy } from "@/features/translation/api";
+import { useTranslationStore } from "@/features/translation/store";
 import GlobalLayout from "@/layouts/global-layout";
 import { useState } from "react";
-import { LuPlus, LuSend } from "react-icons/lu";
+import { LuSend } from "react-icons/lu";
 import { toast } from "sonner";
 
 type Message = {
@@ -20,19 +20,29 @@ type Message = {
 };
 
 function Chat() {
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [response, setResponse] = useState("");
+
+  const message = useTranslationStore((s) => s.message);
+  const setMessage = useTranslationStore((s) => s.setMessage);
+  const context = useTranslationStore((s) => s.context);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSendMessage = async () => {
     if (message.trim() === "") return;
 
-    setMessages((msgs) => [...msgs, { role: "user", content: message }]);
+    if (context.description === "" && !context.details) {
+      toast.error("Please provide context description or upload a file.");
+      setDropdownOpen(true);
+      return;
+    }
 
     try {
+      setMessages((msgs) => [...msgs, { role: "user", content: message }]);
+
       const response = await confirmPolicy({
-        message: message,
-        context: "Please translate the following policy.",
+        message,
+        context,
       });
 
       setMessage("");
@@ -94,7 +104,10 @@ function Chat() {
                     className="w-full pb-12"
                   />
                   <div className="flex w-full justify-between absolute bottom-4 pl-1 pr-4">
-                    <AdditionDropdown />
+                    <AdditionDropdown
+                      open={dropdownOpen}
+                      setOpen={setDropdownOpen}
+                    />
                     <Button
                       onClick={handleSendMessage}
                       variant="ghost"

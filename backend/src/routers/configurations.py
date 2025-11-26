@@ -12,7 +12,7 @@ CONFIRM_CACHE = {}
 
 
 @router.post("/confirm", response_model = dict )
-def post(request: schemas.PolicyTranslationRequest):
+def confirm_policy(request: schemas.PolicyTranslationRequest):
 
     message = request.message
     context = request.context
