@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 function App() {
   return (
     <>
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right" duration={7000} />
       <Router>
         <Routes>
           <Route path="/" element={<Chat />} />

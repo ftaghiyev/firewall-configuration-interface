@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import configurations
+from .routers import policies
 from .config import settings
 import os
 
@@ -21,4 +21,4 @@ def root():
     return {"message": "Firewall Configuration Interface is running..."}
 
 
-app.include_router(configurations.router)
+app.include_router(policies.router)

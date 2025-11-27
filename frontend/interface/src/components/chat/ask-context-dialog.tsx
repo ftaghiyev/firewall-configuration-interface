@@ -32,6 +32,7 @@ function AskContextDialog() {
     if (!file) return;
 
     try {
+      setContextDetails(undefined); // Reset previous details
       const text = await file.text();
       const json = JSON.parse(text);
       setContextDetails(json);
@@ -78,9 +79,20 @@ function AskContextDialog() {
                 className="mt-2 w-full"
                 onChange={handleFileChange}
               />
-              <p className="text-xs">
+              <p
+                className={`${
+                  context.details ? "text-green-500" : "text-gray-400"
+                }`}
+              >
                 {context.details ? "File uploaded." : "No file selected."}
               </p>
+              <div>
+                {context.details && (
+                  <pre className="max-h-40 overflow-auto rounded-md bg-gray-800 p-2 text-xs">
+                    {JSON.stringify(context.details, null, 2)}
+                  </pre>
+                )}
+              </div>
             </div>
             <div className="flex justify-end">
               <Button onClick={() => setOpen(false)}>Confirm</Button>

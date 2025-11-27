@@ -118,3 +118,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+.react-flow__controls-button svg {
+  stroke: #000000 !important;
+  fill: #000000 !important;
+}

@@ -3,7 +3,12 @@ export type Context = {
   details?: Record<string, any>;
 };
 
-export type PolicyTranslateRequestPayload = {
+export type PolicySummaryRequestPayload = {
   message: string;
   context: Context;
+};
+
+export type PolicyTranslateRequestPayload = {
+  session_id: string;
+  confirm: boolean;
 };
