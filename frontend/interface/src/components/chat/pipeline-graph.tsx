@@ -18,16 +18,22 @@ import {
 import "@xyflow/react/dist/style.css";
 import { JsonView, darkStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
+import { Label } from "../ui/label";
+
 interface PipelineGraphProps {
   policyId: string;
   resolverOutput: any;
   irOutput: any;
+  validationWarnings: string[];
+  configs: Record<string, string>;
 }
 
 export default function PipelineGraph({
   policyId,
   resolverOutput,
   irOutput,
+  validationWarnings,
+  configs,
 }: PipelineGraphProps) {
   const nodeWidth = 280;
 
@@ -68,11 +74,28 @@ export default function PipelineGraph({
         type: "jsonNode",
       },
       {
-        id: "policy",
-        position: { x: 40, y: 660 },
+        id: "validation",
+        position: { x: 240, y: 660 },
         data: {
-          label: "Final Policy",
-          json: { policy_id: policyId },
+          label: "Validation Warnings",
+          json: validationWarnings,
+        },
+        style: {
+          width: nodeWidth,
+          padding: 10,
+          borderRadius: 8,
+          background: validationWarnings.length > 0 ? "#b45309" : "#1f2937",
+          color: "#fff",
+          border: "1px solid #374151",
+        },
+        type: "jsonNode",
+      },
+      {
+        id: "configs",
+        position: { x: 40, y: 850 },
+        data: {
+          label: "Compiled Configurations",
+          json: configs,
         },
         style: {
           width: nodeWidth,
@@ -85,7 +108,7 @@ export default function PipelineGraph({
         type: "jsonNode",
       },
     ],
-    [policyId, resolverOutput, irOutput]
+    [resolverOutput, irOutput, validationWarnings, configs]
   );
 
   const initialEdges = [
@@ -98,9 +121,17 @@ export default function PipelineGraph({
       style: { stroke: "#60a5fa", strokeWidth: 2 },
     },
     {
-      id: "ir-policy",
+      id: "ir-validation",
       source: "ir",
-      target: "policy",
+      target: "validation",
+      type: "smoothstep",
+      animated: true,
+      style: { stroke: "#60a5fa", strokeWidth: 2 },
+    },
+    {
+      id: "ir-configs",
+      source: "ir",
+      target: "configs",
       type: "smoothstep",
       animated: true,
       style: { stroke: "#60a5fa", strokeWidth: 2 },
@@ -133,6 +164,7 @@ export default function PipelineGraph({
 
   return (
     <div className="w-full h-full">
+      <Label>Policy ID: {policyId}</Label>
       <ReactFlow
         nodes={nodes}
         edges={edges}

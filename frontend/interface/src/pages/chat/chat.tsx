@@ -17,9 +17,11 @@ import {
 import { useTranslationStore } from "@/features/translation/store";
 import GlobalLayout from "@/layouts/global-layout";
 import { useState } from "react";
-import { LuSend } from "react-icons/lu";
+import { LuCopy, LuSend } from "react-icons/lu";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
+import { Copy } from "lucide-react";
+import CopyButton from "@/components/ui/copy-button";
 
 type Message = {
   role: "user" | "assistant";
@@ -30,6 +32,8 @@ type Representation = {
   policy_id: string;
   resolver_output: any;
   ir: any;
+  validation_warnings: string[];
+  configs: Record<string, string>;
 };
 
 function Chat() {
@@ -66,8 +70,6 @@ function Chat() {
         { role: "assistant", content: summaryResponse.summary },
       ]);
 
-      toast.info("Started translating policy...");
-
       const translateResponse = await translatePolicy({
         session_id: summaryResponse.session_id,
         confirm: true,
@@ -91,6 +93,8 @@ function Chat() {
       handleSendMessage();
     }
   };
+
+  const latest = representations.at(-1);
 
   return (
     <GlobalLayout>
@@ -127,12 +131,40 @@ function Chat() {
                     )}
                   </div>
                 ))}
-
                 {summarizing && (
                   <div className="space-y-2">
                     <Skeleton className="h-3 w-[250px]" />
                     <Skeleton className="h-3 w-[200px]" />
                     <Skeleton className="h-3 w-[150px]" />
+                  </div>
+                )}
+                {translating && (
+                  <div className="flex items-center gap-1.5">
+                    Translating <Spinner />
+                  </div>
+                )}
+                {latest && latest.configs && (
+                  <div className="flex flex-col gap-1.5 mt-4">
+                    <Label className="font-semibold">
+                      Generated configurations:
+                    </Label>
+
+                    <div className="flex flex-col gap-1.5 ml-4">
+                      {Object.entries(latest.configs).map(
+                        ([vendor, config]) => (
+                          <div key={vendor} className="flex flex-col gap-1">
+                            <Label>{vendor}:</Label>
+                            <pre className="relative whitespace-pre-wrap text-sm bg-muted p-2 rounded">
+                              <CopyButton
+                                text={config}
+                                className="absolute top-2 right-2"
+                              />
+                              {config}
+                            </pre>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -185,6 +217,8 @@ function Chat() {
                           policyId={rep.policy_id}
                           resolverOutput={rep.resolver_output}
                           irOutput={rep.ir}
+                          validationWarnings={rep.validation_warnings}
+                          configs={rep.configs}
                         />
                       ))
                     )}
