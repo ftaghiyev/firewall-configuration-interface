@@ -1,4 +1,4 @@
-from typing import Optional, Dict, Any
+from typing import Optional, Dict,  List
 from pydantic import BaseModel
 from .engine.schemas import IRBuilderOutput, ResolverOutput
 
@@ -23,3 +23,5 @@ class PolicyTranslateResponse(BaseModel):
     policy_id: str
     resolver_output: ResolverOutput
     ir: IRBuilderOutput
+    validation_warnings: Optional[List[str]] = []
+    configs: Optional[Dict[str, str]] = {}

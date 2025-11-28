@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Response
 from .. import schemas
 from ..engine.agents import summarize_intent, resolve_policy, build_ir
+from ..engine.validator.palo_alto import PaloAltoValidator
+from ..engine.compiler.palo_alto import PaloAltoCompiler
 import uuid
 
 router = APIRouter(
@@ -66,8 +68,22 @@ def translate_policy(payload: schemas.PolicyTranslateRequest):
         "ir": ir_result
     }
 
+
+
+    validator = PaloAltoValidator()
+    valid, warnings = validator.validate(ir_result)
+    if not valid:
+        print("Validation Warnings:", warnings)
+
+
+    palo_alto_compiler = PaloAltoCompiler()
+    palo_alto_config = palo_alto_compiler.compile_policy(ir_result)
+
+        
     return schemas.PolicyTranslateResponse(
         policy_id = policy_id,
         resolver_output = resolved,
-        ir = ir_result
+        ir = ir_result,
+        validation_warnings = warnings,
+        configs = {"palo_alto": palo_alto_config}
     )
