@@ -14,6 +14,7 @@ import {
   Background,
   Position,
   Handle,
+  NodeResizer,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { JsonView, darkStyles } from "react-json-view-lite";
@@ -25,6 +26,7 @@ interface PipelineGraphProps {
   resolverOutput: any;
   irOutput: any;
   validationWarnings: string[];
+  batfishWarnings: { severity: string; message: string }[];
   configs: Record<string, string>;
 }
 
@@ -33,6 +35,7 @@ export default function PipelineGraph({
   resolverOutput,
   irOutput,
   validationWarnings,
+  batfishWarnings,
   configs,
 }: PipelineGraphProps) {
   const nodeWidth = 280;
@@ -75,16 +78,44 @@ export default function PipelineGraph({
       },
       {
         id: "validation",
-        position: { x: 240, y: 660 },
+        position: { x: 40, y: 660 },
         data: {
-          label: "Validation Warnings",
-          json: validationWarnings,
+          label: "Linter Analysis",
+          json:
+            validationWarnings.length > 0
+              ? validationWarnings
+              : ["No linter warnings"],
         },
         style: {
           width: nodeWidth,
           padding: 10,
           borderRadius: 8,
-          background: validationWarnings.length > 0 ? "#b45309" : "#1f2937",
+          background: validationWarnings.length > 0 ? "#b45309" : "#065f46",
+          color: "#fff",
+          border: "1px solid #374151",
+        },
+        type: "jsonNode",
+      },
+      {
+        id: "batfish",
+        position: { x: 40, y: 1300 },
+        data: {
+          label: "Batfish Analysis",
+          json:
+            batfishWarnings && batfishWarnings.length > 0
+              ? batfishWarnings
+              : ["Batfish validation successful"],
+        },
+        style: {
+          width: nodeWidth,
+          padding: 10,
+          borderRadius: 8,
+          background:
+            batfishWarnings && batfishWarnings.length > 0
+              ? batfishWarnings.some((w) => w.severity === "error")
+                ? "#7f1d1d" // Red for errors
+                : "#b45309" // Orange for warnings
+              : "#065f46", // Green for success
           color: "#fff",
           border: "1px solid #374151",
         },
@@ -92,7 +123,7 @@ export default function PipelineGraph({
       },
       {
         id: "configs",
-        position: { x: 40, y: 850 },
+        position: { x: 40, y: 980 },
         data: {
           label: "Compiled Configurations",
           json: configs,
@@ -108,7 +139,7 @@ export default function PipelineGraph({
         type: "jsonNode",
       },
     ],
-    [resolverOutput, irOutput, validationWarnings, configs]
+    [resolverOutput, irOutput, validationWarnings, batfishWarnings, configs]
   );
 
   const initialEdges = [
@@ -129,8 +160,16 @@ export default function PipelineGraph({
       style: { stroke: "#60a5fa", strokeWidth: 2 },
     },
     {
-      id: "ir-configs",
-      source: "ir",
+      id: "configs-batfish",
+      source: "configs",
+      target: "batfish",
+      type: "smoothstep",
+      animated: true,
+      style: { stroke: "#60a5fa", strokeWidth: 2 },
+    },
+    {
+      id: "validation-configs",
+      source: "validation",
       target: "configs",
       type: "smoothstep",
       animated: true,
@@ -181,14 +220,21 @@ export default function PipelineGraph({
   );
 }
 
-function JsonNode({ data }: { data: any }) {
+function JsonNode({ data, selected }: { data: any; selected?: boolean }) {
   return (
-    <div className="text-left">
+    <div className="text-left h-full flex flex-col">
+      <NodeResizer
+        minWidth={200}
+        minHeight={100}
+        isVisible={selected}
+        lineClassName="border-blue-400"
+        handleClassName="h-3 w-3 bg-blue-400 border-none rounded"
+      />
       <Handle type="target" position={Position.Top} id="in" />
 
       <h3 className="text-base mb-1.5">{data.label}</h3>
 
-      <div className="nodrag bg-[#111827] p-2 rounded-md max-h-48 overflow-y-auto text-xs">
+      <div className="nodrag bg-[#111827] p-2 rounded-md overflow-y-auto text-xs flex-1">
         <JsonView data={data.json} style={darkStyles} />
       </div>
 

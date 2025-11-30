@@ -18,6 +18,11 @@ class PaloAltoCompiler(VendorCompiler):
 
         if proto == "tcp" and ir_rule.dst_ports == [443]:
             return "application-default"
+        
+        # Guard against empty ports list which can happen if LLM produces invalid IR
+        # or for certain protocols. Fallback to app-default.
+        if not ir_rule.dst_ports:
+             return "application-default"
 
         port = ir_rule.dst_ports[0]
         return f"{proto}_{port}"

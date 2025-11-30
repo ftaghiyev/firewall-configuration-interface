@@ -21,6 +21,7 @@ function AskContextDialog() {
     (s) => s.setContextDescription
   );
   const setContextDetails = useTranslationStore((s) => s.setContextDetails);
+  const setContextFilename = useTranslationStore((s) => s.setContextFilename);
 
   console.log("Current context in AskContextDialog:", context);
 
@@ -33,9 +34,11 @@ function AskContextDialog() {
 
     try {
       setContextDetails(undefined); // Reset previous details
+      setContextFilename(undefined);
       const text = await file.text();
       const json = JSON.parse(text);
       setContextDetails(json);
+      setContextFilename(file.name);
     } catch (err) {
       toast.error("Invalid JSON file.");
     }
@@ -84,11 +87,15 @@ function AskContextDialog() {
                   context.details ? "text-green-500" : "text-gray-400"
                 }`}
               >
-                {context.details ? "File uploaded." : "No file selected."}
+                {context.details && context.filename
+                  ? `File uploaded: ${context.filename}`
+                  : context.details
+                  ? "File uploaded."
+                  : "No file selected."}
               </p>
               <div>
                 {context.details && (
-                  <pre className="max-h-40 overflow-auto rounded-md bg-gray-800 p-2 text-xs">
+                  <pre className="max-h-40 w-full overflow-auto rounded-md bg-gray-800 p-2 text-xs whitespace-pre-wrap break-all">
                     {JSON.stringify(context.details, null, 2)}
                   </pre>
                 )}
@@ -105,3 +112,4 @@ function AskContextDialog() {
 }
 
 export default AskContextDialog;
+

@@ -7,15 +7,18 @@ interface TranslationStore {
   context: Context;
   setContextDescription: (newDescription: string) => void;
   setContextDetails: (newDetails: Record<string, any> | undefined) => void;
+  setContextFilename: (newFilename: string | undefined) => void;
 }
 
 export const useTranslationStore = create<TranslationStore>((set) => ({
   message: "",
   setMessage: (newMessage: string) => set({ message: newMessage }),
 
-  context: { description: "", details: undefined },
+  context: { description: "", details: undefined, filename: undefined },
   setContextDescription: (newDescription: string) =>
     set((s) => ({ context: { ...s.context, description: newDescription } })),
   setContextDetails: (newDetails: Record<string, any> | undefined) =>
     set((s) => ({ context: { ...s.context, details: newDetails } })),
+  setContextFilename: (newFilename: string | undefined) =>
+    set((s) => ({ context: { ...s.context, filename: newFilename } })),
 }));

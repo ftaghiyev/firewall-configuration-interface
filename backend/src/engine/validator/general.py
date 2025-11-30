@@ -1,9 +1,9 @@
 from typing import List, Tuple
-from .base import IRValidator
+from .base import IRLinter
 from ..schemas import IRBuilderOutput
 
 
-class GeneralIRValidator(IRValidator):
+class GeneralIRLinter(IRLinter):
 
     def validate(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         warnings: List[str] = []

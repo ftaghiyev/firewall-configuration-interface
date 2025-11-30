@@ -1,0 +1,106 @@
+Test Run: 29-11-25_18-03
+==================================================
+
+TEST CASE: medium_partner_vpn
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_printer_access
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 96.00%)
+EXPECTED CLI:
+set rulebase security rules r1 from Inside
+set rulebase security rules r1 to Inside
+set rulebase security rules r1 source LAN_Subnet
+set rulebase security rules r1 destination Office_Printers
+set rulebase security rules r1 service application-default
+set rulebase security rules r1 action allow
+ACTUAL CLI:
+set rulebase security rules r1 from Inside
+set rulebase security rules r1 to Inside
+set rulebase security rules r1 source LAN_Subnet
+set rulebase security rules r1 destination Office_Printers
+set rulebase security rules r1 service tcp_80
+set rulebase security rules r1 action allow
+
+TEST CASE: medium_public_web
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_block_malicious
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 98.24%)
+EXPECTED CLI:
+set rulebase security rules r1 from Untrust
+set rulebase security rules r1 to Any
+set rulebase security rules r1 source Malicious_IPs
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service application-default
+set rulebase security rules r1 action deny
+ACTUAL CLI:
+set rulebase security rules r1 from Untrust
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Malicious_IPs
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service application-default
+set rulebase security rules r1 action deny
+
+TEST CASE: complex_hq_pci
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_guest_internet
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 65.51%)
+EXPECTED CLI:
+set rulebase security rules r1 from "Guest-Zone"
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Guest_WiFi_Range
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service tcp_80
+set rulebase security rules r1 action allow
+
+set rulebase security rules r2 from "Guest-Zone"
+set rulebase security rules r2 to Untrust
+set rulebase security rules r2 source Guest_WiFi_Range
+set rulebase security rules r2 destination Any
+set rulebase security rules r2 service application-default
+set rulebase security rules r2 action allow
+ACTUAL CLI:
+set rulebase security rules r1 from "Guest-Zone"
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Guest_WiFi_Range
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service tcp_80
+set rulebase security rules r1 action allow
+
+TEST CASE: simple_http_outbound
+------------------------------
+STATUS: PASS
+
+TEST CASE: simple_https_outbound
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: simple_deny_inbound
+------------------------------
+STATUS: PASS
+
+==================================================
+SUMMARY
+==================================================
+Total: 9
+Passed: 6
+Failed: 3
+
+FAILED CASES:
+- medium_printer_access
+- complex_block_malicious
+- complex_guest_internet

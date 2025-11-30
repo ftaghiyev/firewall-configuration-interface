@@ -1,0 +1,93 @@
+[
+  {
+    "id": "medium_partner_vpn",
+    "description": "Allow Partner VPN to DMZ Web on HTTPS during work hours",
+    "context_file": "medium-network.json",
+    "nl_query": "Allow Partner_VPN to access DMZ_Web_Server on HTTPS during Work_Hours",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Partner_VPN"],
+          "dst": ["DMZ_Web_Server"],
+          "protocol": "tcp",
+          "dst_ports": [443],
+          "src_zone": "VPN",
+          "dst_zone": "DMZ",
+          "direction": "inbound",
+          "schedule": "Work_Hours",
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Partner_VPN to access DMZ_Web_Server on HTTPS during Work_Hours",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from VPN\nset rulebase security rules r1 to DMZ\nset rulebase security rules r1 source Partner_VPN\nset rulebase security rules r1 destination DMZ_Web_Server\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action allow\nset rulebase security rules r1 schedule Work_Hours"
+  },
+  {
+    "id": "medium_printer_access",
+    "description": "Allow LAN Subnet to access Office Printers",
+    "context_file": "medium-network.json",
+    "nl_query": "Allow LAN_Subnet to access Office_Printers",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["LAN_Subnet"],
+          "dst": ["Office_Printers"],
+          "protocol": "any",
+          "dst_ports": [],
+          "src_zone": "Inside",
+          "dst_zone": "Inside",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow LAN_Subnet to access Office_Printers",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Inside\nset rulebase security rules r1 to Inside\nset rulebase security rules r1 source LAN_Subnet\nset rulebase security rules r1 destination Office_Printers\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "medium_public_web",
+    "description": "Allow Internet to DMZ Web Server on HTTP and HTTPS",
+    "context_file": "medium-network.json",
+    "nl_query": "Allow Internet to access DMZ_Web_Server on HTTP",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Internet"],
+          "dst": ["DMZ_Web_Server"],
+          "protocol": "tcp",
+          "dst_ports": [80],
+          "src_zone": "Outside",
+          "dst_zone": "DMZ",
+          "direction": "inbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Internet to access DMZ_Web_Server on HTTP",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Outside\nset rulebase security rules r1 to DMZ\nset rulebase security rules r1 source Internet\nset rulebase security rules r1 destination DMZ_Web_Server\nset rulebase security rules r1 service tcp_80\nset rulebase security rules r1 action allow"
+  }
+]
+

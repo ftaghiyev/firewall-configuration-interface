@@ -1,0 +1,43 @@
+{
+  "objects": {
+    "LAN_Subnet": "10.0.0.0/24",
+    "DMZ_Web_Server": "172.16.10.5/32",
+    "DMZ_DB_Server": "172.16.10.20/32",
+    "Internet": "0.0.0.0/0",
+    "Office_Printers": "10.0.0.100-10.0.0.120",
+    "Partner_VPN": "192.168.200.0/24"
+  },
+  "zones": {
+    "Inside": ["LAN_Subnet", "Office_Printers"],
+    "DMZ": ["DMZ_Web_Server", "DMZ_DB_Server"],
+    "Outside": ["Internet"],
+    "VPN": ["Partner_VPN"]
+  },
+  "services": {
+    "Web-Browsing": {
+      "protocol": "tcp",
+      "port": 80
+    },
+    "SSL": {
+      "protocol": "tcp",
+      "port": 443
+    },
+    "SSH": {
+      "protocol": "tcp",
+      "port": 22
+    },
+    "MySQL": {
+      "protocol": "tcp",
+      "port": 3306
+    },
+    "ICMP": {
+      "protocol": "icmp",
+      "port": 0
+    }
+  },
+  "time_windows": {
+    "Work_Hours": "Mon-Fri 09:00-17:00",
+    "Backup_Window": "Daily 02:00-04:00"
+  }
+}
+

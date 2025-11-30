@@ -1,0 +1,45 @@
+{
+  "objects": {
+    "HQ_User_Net": "10.10.0.0/16",
+    "Branch_A_Net": "10.20.0.0/16",
+    "Branch_B_Net": "10.30.0.0/16",
+    "PCI_Servers": "10.100.1.0/24",
+    "Guest_WiFi_Range": "192.168.50.10-192.168.50.200",
+    "Mgmt_Host": "10.255.1.10/32",
+    "Public_Web_Cluster": "203.0.113.10",
+    "Ext_Vendor_API": "api.vendor.com",
+    "Update_Server": "updates.software.com",
+    "Malicious_IPs": "198.51.100.0/24",
+    "Any": "0.0.0.0/0"
+  },
+  "zones": {
+    "Trust-Corp": ["HQ_User_Net"],
+    "Trust-Branch": ["Branch_A_Net", "Branch_B_Net"],
+    "PCI-Zone": ["PCI_Servers"],
+    "Guest-Zone": ["Guest_WiFi_Range"],
+    "Mgmt-Zone": ["Mgmt_Host"],
+    "DMZ-Public": ["Public_Web_Cluster"],
+    "Untrust": ["Any", "Ext_Vendor_API", "Update_Server", "Malicious_IPs"]
+  },
+  "services": {
+    "HTTP": { "protocol": "tcp", "port": 80 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "SSH_Mgmt": { "protocol": "tcp", "port": 2222 },
+    "RDP": { "protocol": "tcp", "port": 3389 },
+    "SQL_Server": { "protocol": "tcp", "port": 1433 },
+    "Oracle_DB": { "protocol": "tcp", "port": 1521 },
+    "DNS_UDP": { "protocol": "udp", "port": 53 },
+    "DNS_TCP": { "protocol": "tcp", "port": 53 },
+    "NTP": { "protocol": "udp", "port": 123 },
+    "Syslog": { "protocol": "udp", "port": 514 },
+    "FTP": { "protocol": "tcp", "port": 21 },
+    "SMTP": { "protocol": "tcp", "port": 25 }
+  },
+  "time_windows": {
+    "Business_Hours": "Mon-Fri 08:00-18:00",
+    "Weekend_Maintenance": "Sat-Sun 22:00-06:00",
+    "Holiday_Freeze": "2023-12-20-2024-01-05",
+    "Nightly_Batch": "Daily 01:00-03:00"
+  }
+}
+

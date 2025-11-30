@@ -1,13 +1,13 @@
 {
   "objects": {
-    "HR laptops": "10.10.10.0/24",
-    "Finance servers": "10.20.0.0/24",
+    "HR_laptops": "10.10.10.0/24",
+    "Finance_servers": "10.20.0.0/24",
     "PAYROLL_SAAS": ["payroll.saas.com"],
     "INTERNET": "0.0.0.0/0"
   },
   "zones": {
-    "HR": ["HR laptops"],
-    "Finance": ["Finance servers"],
+    "HR": ["HR_laptops"],
+    "Finance": ["Finance_servers"],
     "External": ["INTERNET", "PAYROLL_SAAS"]
   },
   "services": {
@@ -25,7 +25,7 @@
     }
   },
   "time_windows": {
-    "business hours": "Mon-Fri 08:00-18:00",
+    "business-hours": "Mon-Fri 08:00-18:00",
     "night": "Daily 22:00-06:00"
   }
 }

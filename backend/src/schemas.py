@@ -24,4 +24,5 @@ class PolicyTranslateResponse(BaseModel):
     resolver_output: ResolverOutput
     ir: IRBuilderOutput
     validation_warnings: Optional[List[str]] = []
+    batfish_warnings: Optional[List[Dict[str, str]]] = []  # List of { "severity": "warning"|"error", "message": "..." }
     configs: Optional[Dict[str, str]] = {}

@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Response
 from .. import schemas
 from ..engine.agents import summarize_intent, resolve_policy, build_ir
-from ..engine.validator.palo_alto import PaloAltoValidator
+from ..engine.validator.palo_alto import PaloAltoLinter
+from ..engine.batfish.validator import BatfishManager
 from ..engine.compiler.palo_alto import PaloAltoCompiler
 import uuid
 
@@ -70,7 +71,7 @@ def translate_policy(payload: schemas.PolicyTranslateRequest):
 
 
 
-    validator = PaloAltoValidator()
+    validator = PaloAltoLinter()
     valid, warnings = validator.validate(ir_result)
     if not valid:
         print("Validation Warnings:", warnings)
@@ -78,12 +79,17 @@ def translate_policy(payload: schemas.PolicyTranslateRequest):
 
     palo_alto_compiler = PaloAltoCompiler()
     palo_alto_config = palo_alto_compiler.compile_policy(ir_result)
+    
+    # Batfish Validation
+    batfish_manager = BatfishManager()
+    bf_warnings = batfish_manager.validate(palo_alto_config, context=cached["context"])
+    
 
-        
     return schemas.PolicyTranslateResponse(
         policy_id = policy_id,
         resolver_output = resolved,
         ir = ir_result,
         validation_warnings = warnings,
+        batfish_warnings = bf_warnings,
         configs = {"palo_alto": palo_alto_config}
     )

@@ -1,6 +1,7 @@
 export type Context = {
   description?: string;
   details?: Record<string, any>;
+  filename?: string;
 };
 
 export type PolicySummaryRequestPayload = {

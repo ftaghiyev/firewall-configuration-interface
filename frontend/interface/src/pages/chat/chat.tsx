@@ -33,6 +33,7 @@ type Representation = {
   resolver_output: any;
   ir: any;
   validation_warnings: string[];
+  batfish_warnings: { severity: string; message: string }[];
   configs: Record<string, string>;
 };
 
@@ -178,10 +179,17 @@ function Chat() {
                     onKeyDown={handleKeyDown}
                   />
                   <div className="flex w-full justify-between absolute bottom-4 pl-1 pr-4">
-                    <AdditionDropdown
-                      open={dropdownOpen}
-                      setOpen={setDropdownOpen}
-                    />
+                    <div className="flex items-center gap-2">
+                      <AdditionDropdown
+                        open={dropdownOpen}
+                        setOpen={setDropdownOpen}
+                      />
+                      {context.filename && (
+                        <span className="text-xs text-muted-foreground">
+                          {context.filename}
+                        </span>
+                      )}
+                    </div>
                     <Button
                       onClick={handleSendMessage}
                       variant="ghost"
@@ -218,6 +226,7 @@ function Chat() {
                           resolverOutput={rep.resolver_output}
                           irOutput={rep.ir}
                           validationWarnings={rep.validation_warnings}
+                          batfishWarnings={rep.batfish_warnings}
                           configs={rep.configs}
                         />
                       ))

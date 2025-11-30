@@ -1,0 +1,93 @@
+[
+  {
+    "id": "simple_http_outbound",
+    "description": "Allow HTTP access from Internal to Internet",
+    "context_file": "simple-network.json",
+    "nl_query": "Allow Internal_Net to access Internet on HTTP",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Internal_Net"],
+          "dst": ["Internet"],
+          "protocol": "tcp",
+          "dst_ports": [80],
+          "src_zone": "Trust",
+          "dst_zone": "Untrust",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Internal_Net to access Internet on HTTP",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Trust\nset rulebase security rules r1 to Untrust\nset rulebase security rules r1 source Internal_Net\nset rulebase security rules r1 destination Internet\nset rulebase security rules r1 service tcp_80\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "simple_https_outbound",
+    "description": "Allow HTTPS access from Internal to Internet",
+    "context_file": "simple-network.json",
+    "nl_query": "Allow Internal_Net to access Internet on HTTPS",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Internal_Net"],
+          "dst": ["Internet"],
+          "protocol": "tcp",
+          "dst_ports": [443],
+          "src_zone": "Trust",
+          "dst_zone": "Untrust",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Internal_Net to access Internet on HTTPS",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Trust\nset rulebase security rules r1 to Untrust\nset rulebase security rules r1 source Internal_Net\nset rulebase security rules r1 destination Internet\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "simple_deny_inbound",
+    "description": "Deny all inbound traffic from Internet",
+    "context_file": "simple-network.json",
+    "nl_query": "Deny Internet from accessing Internal_Net",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "deny",
+          "src": ["Internet"],
+          "dst": ["Internal_Net"],
+          "protocol": "any",
+          "dst_ports": [],
+          "src_zone": "Untrust",
+          "dst_zone": "Trust",
+          "direction": "inbound",
+          "schedule": null,
+          "log": false,
+          "priority": 10
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Deny Internet from accessing Internal_Net",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Untrust\nset rulebase security rules r1 to Trust\nset rulebase security rules r1 source Internet\nset rulebase security rules r1 destination Internal_Net\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action deny"
+  }
+]
+

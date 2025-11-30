@@ -1,8 +1,8 @@
-from .general import GeneralIRValidator
-from .palo_alto import PaloAltoValidator
+from .general import GeneralIRLinter
+from .palo_alto import PaloAltoLinter
 
 VALIDATORS = {
-    "palo_alto": [GeneralIRValidator(), PaloAltoValidator()],
+    "palo_alto": [GeneralIRLinter(), PaloAltoLinter()],
 }
 
 def validate_ir(ir, vendor: str):

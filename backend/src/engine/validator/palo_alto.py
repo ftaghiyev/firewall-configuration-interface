@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from .base import IRValidator
+from .base import IRLinter
 from ..schemas import IRBuilderOutput
 import ipaddress
 
@@ -25,7 +25,7 @@ def _is_ip_or_cidr(value: str) -> bool:
         return False
 
 
-class PaloAltoValidator(IRValidator):
+class PaloAltoLinter(IRLinter):
 
     def validate(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         warnings: List[str] = []

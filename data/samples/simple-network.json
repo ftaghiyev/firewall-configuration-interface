@@ -1,0 +1,27 @@
+{
+  "objects": {
+    "Internal_Net": "192.168.1.0/24",
+    "Internet": "0.0.0.0/0",
+    "Gateway": "192.168.1.1/32"
+  },
+  "zones": {
+    "Trust": ["Internal_Net", "Gateway"],
+    "Untrust": ["Internet"]
+  },
+  "services": {
+    "HTTP": {
+      "protocol": "tcp",
+      "port": 80
+    },
+    "HTTPS": {
+      "protocol": "tcp",
+      "port": 443
+    },
+    "DNS": {
+      "protocol": "udp",
+      "port": 53
+    }
+  },
+  "time_windows": {}
+}
+
