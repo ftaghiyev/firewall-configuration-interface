@@ -1,0 +1,63 @@
+[
+  {
+    "id": "simple_3_iot_mqtt",
+    "description": "Allow IoT Sensors to Data Collector via MQTT",
+    "context_file": "simple-network-3.json",
+    "nl_query": "Allow IoT_Sensors to access Data_Collector on MQTT",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["IoT_Sensors"],
+          "dst": ["Data_Collector"],
+          "protocol": "tcp",
+          "dst_ports": [1883],
+          "src_zone": "IoT_Zone",
+          "dst_zone": "Server_Zone",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow IoT_Sensors to access Data_Collector on MQTT",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from IoT_Zone\nset rulebase security rules r1 to Server_Zone\nset rulebase security rules r1 source IoT_Sensors\nset rulebase security rules r1 destination Data_Collector\nset rulebase security rules r1 service tcp_1883\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "simple_3_firmware_update",
+    "description": "Allow Data Collector to Firmware Update Server",
+    "context_file": "simple-network-3.json",
+    "nl_query": "Allow Data_Collector to access Firmware_Update_Server on HTTPS",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Data_Collector"],
+          "dst": ["Firmware_Update_Server"],
+          "protocol": "tcp",
+          "dst_ports": [443],
+          "src_zone": "Server_Zone",
+          "dst_zone": "External",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Data_Collector to access Firmware_Update_Server on HTTPS",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Server_Zone\nset rulebase security rules r1 to External\nset rulebase security rules r1 source Data_Collector\nset rulebase security rules r1 destination Firmware_Update_Server\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action allow"
+  }
+]
+

@@ -46,7 +46,8 @@ class TestPipelineTriplets(unittest.TestCase):
         # Load all *_tests.json files
         self.all_triplets = []
         for filename in os.listdir(self.tests_dir):
-            if filename.endswith('_tests.json'):
+            if 'tests' in filename:
+                print(f"Loading test file: {filename}")
                 with open(os.path.join(self.tests_dir, filename), 'r') as f:
                     self.all_triplets.extend(json.load(f))
 
@@ -126,9 +127,9 @@ class TestPipelineTriplets(unittest.TestCase):
                     # Compare IR
                     generated_ir_dict = ir_out.model_dump()
                     if generated_ir_dict != case['expected_ir']:
-                         print(f"  {self.YELLOW}[WARN]{self.RESET} Generated IR differs from Expected for {case['id']}")
-                         log_file.write("WARNING: IR Mismatch\n")
-                         # print(f"Expected:\n{case['expected_ir']}\nGot:\n{generated_ir_dict}")
+                        print(f"  {self.YELLOW}[WARN]{self.RESET} Generated IR differs from Expected for {case['id']}")
+                        log_file.write("WARNING: IR Mismatch\n")
+                        print(f"Expected:\n{case['expected_ir']}\nGot:\n{generated_ir_dict}")
 
                     # Compile
                     cli_output = self.compiler.compile_policy(ir_out)

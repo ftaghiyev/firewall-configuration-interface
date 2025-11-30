@@ -1,0 +1,77 @@
+[
+  {
+    "id": "medium_2_voip",
+    "description": "Allow VoIP Phones to SIP Server",
+    "context_file": "medium-network-2.json",
+    "nl_query": "Allow VoIP_Phones to access SIP_Server on SIP_UDP and RTP",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["VoIP_Phones"],
+          "dst": ["SIP_Server"],
+          "protocol": "udp",
+          "dst_ports": [5060],
+          "src_zone": "Voice",
+          "dst_zone": "Datacenter",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        },
+        {
+          "id": "r2",
+          "action": "allow",
+          "src": ["VoIP_Phones"],
+          "dst": ["SIP_Server"],
+          "protocol": "udp",
+          "dst_ports": [10000],
+          "src_zone": "Voice",
+          "dst_zone": "Datacenter",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow VoIP_Phones to access SIP_Server on SIP_UDP and RTP",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Voice\nset rulebase security rules r1 to Datacenter\nset rulebase security rules r1 source VoIP_Phones\nset rulebase security rules r1 destination SIP_Server\nset rulebase security rules r1 service udp_5060\nset rulebase security rules r1 action allow\n\nset rulebase security rules r2 from Voice\nset rulebase security rules r2 to Datacenter\nset rulebase security rules r2 source VoIP_Phones\nset rulebase security rules r2 destination SIP_Server\nset rulebase security rules r2 service udp_10000\nset rulebase security rules r2 action allow"
+  },
+  {
+    "id": "medium_2_video_conf",
+    "description": "Allow Video Conference Room to Zoom Ranges",
+    "context_file": "medium-network-2.json",
+    "nl_query": "Allow Video_Conf_Room to access Zoom_Ranges on HTTPS",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Video_Conf_Room"],
+          "dst": ["Zoom_Ranges"],
+          "protocol": "tcp",
+          "dst_ports": [443],
+          "src_zone": "Video",
+          "dst_zone": "Outside",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Video_Conf_Room to access Zoom_Ranges on HTTPS",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Video\nset rulebase security rules r1 to Outside\nset rulebase security rules r1 source Video_Conf_Room\nset rulebase security rules r1 destination Zoom_Ranges\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action allow"
+  }
+]
+

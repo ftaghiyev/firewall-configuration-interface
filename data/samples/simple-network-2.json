@@ -1,0 +1,23 @@
+{
+  "objects": {
+    "Branch_Office_LAN": "192.168.10.0/24",
+    "Guest_WiFi": "192.168.20.0/24",
+    "Internet": "0.0.0.0/0",
+    "HQ_VPN_Gateway": "203.0.113.50/32"
+  },
+  "zones": {
+    "Trust": ["Branch_Office_LAN"],
+    "Guest": ["Guest_WiFi"],
+    "Untrust": ["Internet"],
+    "VPN": ["HQ_VPN_Gateway"]
+  },
+  "services": {
+    "HTTP": { "protocol": "tcp", "port": 80 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "DNS": { "protocol": "udp", "port": 53 }
+  },
+  "time_windows": {
+    "Guest_Hours": "Daily 08:00-20:00"
+  }
+}
+

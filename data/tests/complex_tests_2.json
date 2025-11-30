@@ -1,0 +1,63 @@
+[
+  {
+    "id": "complex_2_hybrid_ad",
+    "description": "Allow OnPrem AD to sync with AWS Cloud",
+    "context_file": "complex-network-2.json",
+    "nl_query": "Allow Active_Directory to access AWS_VPC_Prod on LDAPS",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Active_Directory"],
+          "dst": ["AWS_VPC_Prod"],
+          "protocol": "tcp",
+          "dst_ports": [636],
+          "src_zone": "OnPrem",
+          "dst_zone": "Cloud",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Active_Directory to access AWS_VPC_Prod on LDAPS",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from OnPrem\nset rulebase security rules r1 to Cloud\nset rulebase security rules r1 source Active_Directory\nset rulebase security rules r1 destination AWS_VPC_Prod\nset rulebase security rules r1 service tcp_636\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "complex_2_remote_vpn",
+    "description": "Allow Remote Workers to access Custom App API",
+    "context_file": "complex-network-2.json",
+    "nl_query": "Allow Remote_Workers to access AWS_VPC_Prod on Custom_App_API",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Remote_Workers"],
+          "dst": ["AWS_VPC_Prod"],
+          "protocol": "tcp",
+          "dst_ports": [8443],
+          "src_zone": "VPN_Users",
+          "dst_zone": "Cloud",
+          "direction": "outbound",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Remote_Workers to access AWS_VPC_Prod on Custom_App_API",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from VPN_Users\nset rulebase security rules r1 to Cloud\nset rulebase security rules r1 source Remote_Workers\nset rulebase security rules r1 destination AWS_VPC_Prod\nset rulebase security rules r1 service tcp_8443\nset rulebase security rules r1 action allow"
+  }
+]
+

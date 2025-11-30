@@ -1,0 +1,63 @@
+[
+  {
+    "id": "medium_3_cicd_deploy",
+    "description": "Allow CI/CD Pipeline to deploy to Staging App",
+    "context_file": "medium-network-3.json",
+    "nl_query": "Allow CI_CD_Pipeline to access Staging_App on SSH",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["CI_CD_Pipeline"],
+          "dst": ["Staging_App"],
+          "protocol": "tcp",
+          "dst_ports": [22],
+          "src_zone": "Tools",
+          "dst_zone": "Staging",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow CI_CD_Pipeline to access Staging_App on SSH",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Tools\nset rulebase security rules r1 to Staging\nset rulebase security rules r1 source CI_CD_Pipeline\nset rulebase security rules r1 destination Staging_App\nset rulebase security rules r1 service tcp_22\nset rulebase security rules r1 action allow"
+  },
+  {
+    "id": "medium_3_prod_db_maintenance",
+    "description": "Allow Dev Subnet to Prod DB only during Maintenance Window",
+    "context_file": "medium-network-3.json",
+    "nl_query": "Allow Dev_Subnet to access Prod_DB on Postgres during Maintenance_Window",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Dev_Subnet"],
+          "dst": ["Prod_DB"],
+          "protocol": "tcp",
+          "dst_ports": [5432],
+          "src_zone": "Development",
+          "dst_zone": "Production",
+          "direction": "internal",
+          "schedule": "Maintenance_Window",
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Dev_Subnet to access Prod_DB on Postgres during Maintenance_Window",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Development\nset rulebase security rules r1 to Production\nset rulebase security rules r1 source Dev_Subnet\nset rulebase security rules r1 destination Prod_DB\nset rulebase security rules r1 service tcp_5432\nset rulebase security rules r1 action allow\nset rulebase security rules r1 schedule Maintenance_Window"
+  }
+]
+

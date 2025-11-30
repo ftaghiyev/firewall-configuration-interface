@@ -1,0 +1,20 @@
+{
+  "objects": {
+    "IoT_Sensors": "10.50.1.0/24",
+    "IoT_Controllers": "10.50.2.0/24",
+    "Data_Collector": "10.10.10.50/32",
+    "Firmware_Update_Server": "198.51.100.10"
+  },
+  "zones": {
+    "IoT_Zone": ["IoT_Sensors", "IoT_Controllers"],
+    "Server_Zone": ["Data_Collector"],
+    "External": ["Firmware_Update_Server"]
+  },
+  "services": {
+    "MQTT": { "protocol": "tcp", "port": 1883 },
+    "CoAP": { "protocol": "udp", "port": 5683 },
+    "HTTPS": { "protocol": "tcp", "port": 443 }
+  },
+  "time_windows": {}
+}
+

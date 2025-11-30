@@ -38,6 +38,7 @@ Rules:
 - When safe and obvious, infer associated protocol/port for common services
   (e.g., HTTPS -> tcp:443, SSH -> tcp:22, DNS -> udp:53); otherwise leave
   protocols and ports empty and record the uncertainty in ambiguities.
+- Do NOT infer ports based solely on object names (e.g. do not assume "Printers" uses port 80).
 - Detect direction if implied (e.g., “to the internet” -> outbound; “from internet” -> inbound).
 - If the user didn't specify a field (e.g., no schedule, no logging), leave it as null and add a note in ambiguities.
 - Never fabricate entities, ports, or schedules that are not clearly supported by the text.
@@ -57,6 +58,7 @@ Do not add comments, explanations, or text outside JSON.
 
 Rules:
 - Create exactly one or more rules depending on how many destinations or services exist.
+- If multiple services (e.g., HTTP and HTTPS) are present, create separate rules for each service (r1, r2, ...).
 - Infer src_zone and dst_zone using the context (zone membership).
 - Set priority = 100 for 'allow', and 10 for 'deny'.
 - If anything is missing or unclear, include it in metadata.warnings.

@@ -1,0 +1,28 @@
+{
+  "objects": {
+    "OnPrem_Servers": "10.0.0.0/16",
+    "AWS_VPC_Prod": "172.31.0.0/16",
+    "AWS_S3_Endpoint": "s3.amazonaws.com",
+    "Direct_Connect_Router": "192.168.255.1",
+    "Remote_Workers": "10.200.0.0/24",
+    "Active_Directory": "10.0.1.10",
+    "Any": "0.0.0.0/0"
+  },
+  "zones": {
+    "OnPrem": ["OnPrem_Servers", "Active_Directory", "Direct_Connect_Router"],
+    "Cloud": ["AWS_VPC_Prod", "AWS_S3_Endpoint"],
+    "VPN_Users": ["Remote_Workers"],
+    "Internet": ["Any"]
+  },
+  "services": {
+    "LDAP": { "protocol": "tcp", "port": 389 },
+    "LDAPS": { "protocol": "tcp", "port": 636 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "Custom_App_API": { "protocol": "tcp", "port": 8443 },
+    "SMB": { "protocol": "tcp", "port": 445 }
+  },
+  "time_windows": {
+    "Always": "Daily 00:00-23:59"
+  }
+}
+

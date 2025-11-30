@@ -1,0 +1,28 @@
+{
+  "objects": {
+    "Tenant_A_Web": "10.10.10.5",
+    "Tenant_A_DB": "10.10.20.5",
+    "Tenant_B_Web": "10.20.10.5",
+    "Tenant_B_DB": "10.20.20.5",
+    "Shared_Mgmt": "10.99.0.0/24",
+    "Backup_Server": "10.99.0.100",
+    "Internet": "0.0.0.0/0"
+  },
+  "zones": {
+    "Tenant_A": ["Tenant_A_Web", "Tenant_A_DB"],
+    "Tenant_B": ["Tenant_B_Web", "Tenant_B_DB"],
+    "Management": ["Shared_Mgmt", "Backup_Server"],
+    "Outside": ["Internet"]
+  },
+  "services": {
+    "HTTP": { "protocol": "tcp", "port": 80 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "MySQL": { "protocol": "tcp", "port": 3306 },
+    "SSH": { "protocol": "tcp", "port": 22 },
+    "Backup_Agent": { "protocol": "tcp", "port": 10050 }
+  },
+  "time_windows": {
+    "Nightly": "Daily 01:00-05:00"
+  }
+}
+

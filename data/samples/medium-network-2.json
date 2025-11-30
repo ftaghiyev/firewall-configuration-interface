@@ -1,0 +1,27 @@
+{
+  "objects": {
+    "User_VLAN": "10.100.10.0/24",
+    "VoIP_Phones": "10.100.20.0/24",
+    "Video_Conf_Room": "10.100.30.10/32",
+    "SIP_Server": "172.16.50.5",
+    "Internet": "0.0.0.0/0",
+    "Zoom_Ranges": "149.137.0.0/16"
+  },
+  "zones": {
+    "Users": ["User_VLAN"],
+    "Voice": ["VoIP_Phones"],
+    "Video": ["Video_Conf_Room"],
+    "Datacenter": ["SIP_Server"],
+    "Outside": ["Internet", "Zoom_Ranges"]
+  },
+  "services": {
+    "SIP_TCP": { "protocol": "tcp", "port": 5060 },
+    "SIP_UDP": { "protocol": "udp", "port": 5060 },
+    "RTP": { "protocol": "udp", "port": 10000 },
+    "HTTPS": { "protocol": "tcp", "port": 443 }
+  },
+  "time_windows": {
+    "Business_Hours": "Mon-Fri 08:00-18:00"
+  }
+}
+

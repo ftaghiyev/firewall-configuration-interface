@@ -7,6 +7,7 @@ An AI-powered tool for translating natural language policy intents into vendor-s
 - **Natural Language to Policy Translation**: Describe your firewall needs in plain English (e.g., "Allow HR to access Finance servers on HTTPS").
 - **Context-Aware Resolution**: Resolves zones, objects, and services from your network definition file.
 - **Static Analysis (Linter)**: Validates logical correctness of the generated policy (e.g., "ICMP should not have ports").
+- **Safety Gate**: Enforces security best practices (e.g., blocking 'any-any' allow rules) before generation.
 - **Batfish Simulation**: Runs a "dry-run" analysis using Batfish to verify the configuration syntax and referential integrity against a simulated device.
 - **Interactive UI**: Visualize the translation pipeline, validation warnings, and generated CLI commands.
 
@@ -17,6 +18,7 @@ The project consists of three main components:
 1.  **Backend (`backend/`)**:
 
     - **Engine**: Core logic for intent resolution, IR building, and compilation.
+    - **Safety Gate**: Pre-compilation checks for dangerous patterns (e.g. Any/Any allows).
     - **Linter**: (e.g `PaloAltoLinter`) for logical checks.
     - **Batfish Manager**: Integration with Batfish for configuration validation.
     - **API**: FastAPI server exposing endpoints for policy translation.
@@ -81,6 +83,7 @@ The UI will be available at `http://localhost:5173`.
     - **Resolver**: Shows how natural language mapped to your defined objects.
     - **IR**: The abstract rule representation.
     - **Linter**: Checks for logical errors.
+    - **Safety Gate**: Checks for security violations.
     - **Batfish Analysis**: Checks for configuration validity (syntax, references).
     - **Config**: The final PAN-OS CLI commands.
 
@@ -92,7 +95,8 @@ The UI will be available at `http://localhost:5173`.
 │   ├── src/engine/         # Core logic (Agents, Compiler, Linters)
 │   │   ├── batfish/        # Batfish integration logic
 │   │   ├── compiler/       # Vendor-specific compilers (Palo Alto)
-│   │   └── linter/      # Static linters
+│   │   ├── linter/         # Static linters
+│   │   └── safety/         # Safety enforcement gates
 │   └── routers/            # API endpoints
 ├── frontend/               # React application
 │   └── interface/src/      # UI Components and Hooks

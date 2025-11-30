@@ -1,0 +1,25 @@
+{
+  "objects": {
+    "Dev_Subnet": "10.1.0.0/16",
+    "Staging_App": "10.2.10.5",
+    "Staging_DB": "10.2.10.6",
+    "Prod_App": "10.3.10.5",
+    "Prod_DB": "10.3.10.6",
+    "CI_CD_Pipeline": "192.168.100.50"
+  },
+  "zones": {
+    "Development": ["Dev_Subnet"],
+    "Staging": ["Staging_App", "Staging_DB"],
+    "Production": ["Prod_App", "Prod_DB"],
+    "Tools": ["CI_CD_Pipeline"]
+  },
+  "services": {
+    "SSH": { "protocol": "tcp", "port": 22 },
+    "HTTP_8080": { "protocol": "tcp", "port": 8080 },
+    "Postgres": { "protocol": "tcp", "port": 5432 }
+  },
+  "time_windows": {
+    "Maintenance_Window": "Sun 02:00-06:00"
+  }
+}
+

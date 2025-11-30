@@ -1,0 +1,63 @@
+[
+  {
+    "id": "complex_3_tenant_isolation",
+    "description": "Deny Tenant A from accessing Tenant B",
+    "context_file": "complex-network-3.json",
+    "nl_query": "Deny Tenant_A from accessing Tenant_B",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "deny",
+          "src": ["Tenant_A"],
+          "dst": ["Tenant_B"],
+          "protocol": "any",
+          "dst_ports": [],
+          "src_zone": "Tenant_A",
+          "dst_zone": "Tenant_B",
+          "direction": "internal",
+          "schedule": null,
+          "log": false,
+          "priority": 10
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Deny Tenant_A from accessing Tenant_B",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Tenant_A\nset rulebase security rules r1 to Tenant_B\nset rulebase security rules r1 source Tenant_A\nset rulebase security rules r1 destination Tenant_B\nset rulebase security rules r1 service application-default\nset rulebase security rules r1 action deny"
+  },
+  {
+    "id": "complex_3_backup",
+    "description": "Allow Backup Server to pull data from Tenant A DB nightly",
+    "context_file": "complex-network-3.json",
+    "nl_query": "Allow Backup_Server to access Tenant_A_DB on Backup_Agent during Nightly",
+    "expected_ir": {
+      "rules": [
+        {
+          "id": "r1",
+          "action": "allow",
+          "src": ["Backup_Server"],
+          "dst": ["Tenant_A_DB"],
+          "protocol": "tcp",
+          "dst_ports": [10050],
+          "src_zone": "Management",
+          "dst_zone": "Tenant_A",
+          "direction": "internal",
+          "schedule": "Nightly",
+          "log": false,
+          "priority": 100
+        }
+      ],
+      "metadata": {
+        "raw_policy": "Allow Backup_Server to access Tenant_A_DB on Backup_Agent during Nightly",
+        "warnings": [],
+        "context_used": true
+      }
+    },
+    "expected_cli": "set rulebase security rules r1 from Management\nset rulebase security rules r1 to Tenant_A\nset rulebase security rules r1 source Backup_Server\nset rulebase security rules r1 destination Tenant_A_DB\nset rulebase security rules r1 service tcp_10050\nset rulebase security rules r1 action allow\nset rulebase security rules r1 schedule Nightly"
+  }
+]
+

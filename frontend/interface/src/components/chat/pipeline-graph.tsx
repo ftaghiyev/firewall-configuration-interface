@@ -15,11 +15,16 @@ import {
   Position,
   Handle,
   NodeResizer,
+  Panel,
+  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { JsonView, darkStyles, collapseAllNested } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import { Label } from "../ui/label";
+import dagre from "dagre";
+import { Button } from "../ui/button";
+import { LuLayoutTemplate } from "react-icons/lu";
 
 interface PipelineGraphProps {
   policyId: string;
@@ -31,6 +36,42 @@ interface PipelineGraphProps {
   configs: Record<string, string>;
 }
 
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+const nodeWidth = 280;
+const nodeHeight = 300;
+
+const getLayoutedElements = (nodes: Node[], edges: Edge[]) => {
+  dagreGraph.setGraph({ rankdir: "TB" });
+
+  nodes.forEach((node) => {
+    dagreGraph.setNode(node.id, {
+      width: (node.style?.width as number) || nodeWidth,
+      height: (node.measured?.height as number) || (node.style?.height as number) || nodeHeight,
+    });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  return nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      targetPosition: Position.Top,
+      sourcePosition: Position.Bottom,
+      position: {
+        x: nodeWithPosition.x - ((node.style?.width as number) || nodeWidth) / 2,
+        y: nodeWithPosition.y - ((node.measured?.height as number) || (node.style?.height as number) || nodeHeight) / 2,
+      },
+    };
+  });
+};
+
 export default function PipelineGraph({
   policyId,
   resolverOutput,
@@ -40,9 +81,10 @@ export default function PipelineGraph({
   batfishWarnings,
   configs,
 }: PipelineGraphProps) {
-  const nodeWidth = 280;
+  // const { fitView } = useReactFlow(); // Can't use inside the component rendering ReactFlowProvider unless wrapped.
+  // We can use the instance from onInit or store it. But here we can just update nodes.
 
-  const initialNodes = useMemo(
+  const initialNodes: Node[] = useMemo(
     () => [
       {
         id: "resolver",
@@ -208,6 +250,11 @@ export default function PipelineGraph({
     console.log("drag event", node.data);
   };
 
+  const onLayout = useCallback(() => {
+    const layoutedNodes = getLayoutedElements(nodes, edges);
+    setNodes([...layoutedNodes]);
+  }, [nodes, edges]);
+
   const nodeTypes = {
     jsonNode: JsonNode,
   };
@@ -233,6 +280,12 @@ export default function PipelineGraph({
       >
         <Background color="#333" gap={12} />
         <Controls className="" />
+        <Panel position="top-right">
+          <Button onClick={onLayout} variant="outline" size="sm">
+            <LuLayoutTemplate className="mr-2 h-4 w-4" />
+            Align
+          </Button>
+        </Panel>
       </ReactFlow>
     </div>
   );

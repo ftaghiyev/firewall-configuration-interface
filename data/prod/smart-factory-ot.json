@@ -1,0 +1,34 @@
+{
+  "objects": {
+    "PLC_Controller_Line1": "192.168.10.5",
+    "PLC_Controller_Line2": "192.168.10.6",
+    "HMI_Panel_Line1": "192.168.10.20",
+    "HMI_Panel_Line2": "192.168.10.21",
+    "Scada_Server": "10.20.1.100",
+    "Historian_DB": "10.20.1.101",
+    "Engineering_Workstation": "10.20.1.50",
+    "Corporate_User_Net": "10.50.0.0/16",
+    "Vendor_VPN_Gateway": "172.16.99.1",
+    "Internet": "0.0.0.0/0"
+  },
+  "zones": {
+    "OT_Field_Level": ["PLC_Controller_Line1", "PLC_Controller_Line2", "HMI_Panel_Line1", "HMI_Panel_Line2"],
+    "OT_Supervisory": ["Scada_Server", "Historian_DB", "Engineering_Workstation"],
+    "IT_Corporate": ["Corporate_User_Net"],
+    "Ext_Vendor": ["Vendor_VPN_Gateway"],
+    "Untrust": ["Internet"]
+  },
+  "services": {
+    "Modbus_TCP": { "protocol": "tcp", "port": 502 },
+    "DNP3": { "protocol": "tcp", "port": 20000 },
+    "RDP": { "protocol": "tcp", "port": 3389 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "OPC_UA": { "protocol": "tcp", "port": 4840 }
+  },
+  "time_windows": {
+    "Shift_1": "Mon-Fri 06:00-14:00",
+    "Shift_2": "Mon-Fri 14:00-22:00",
+    "Shift_3": "Mon-Fri 22:00-06:00"
+  }
+}
+

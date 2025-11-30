@@ -1,0 +1,33 @@
+{
+  "objects": {
+    "Web_Cluster_Public": "203.0.113.10-203.0.113.15",
+    "App_Server_Private": "10.0.1.10",
+    "DB_Cluster_Primary": "10.0.2.10",
+    "DB_Cluster_Replica": "10.0.2.11",
+    "Redis_Cache": "10.0.3.5",
+    "Admin_Jumpbox": "10.0.99.5",
+    "Monitoring_System": "10.0.99.10",
+    "Any_Internet": "0.0.0.0/0",
+    "Office_VPN_Pool": "192.168.254.0/24"
+  },
+  "zones": {
+    "Public_DMZ": ["Web_Cluster_Public"],
+    "App_Tier": ["App_Server_Private", "Redis_Cache"],
+    "Data_Tier": ["DB_Cluster_Primary", "DB_Cluster_Replica"],
+    "Mgmt_Tier": ["Admin_Jumpbox", "Monitoring_System"],
+    "Untrust": ["Any_Internet"],
+    "VPN_Zone": ["Office_VPN_Pool"]
+  },
+  "services": {
+    "HTTP": { "protocol": "tcp", "port": 80 },
+    "HTTPS": { "protocol": "tcp", "port": 443 },
+    "SSH": { "protocol": "tcp", "port": 22 },
+    "Postgres": { "protocol": "tcp", "port": 5432 },
+    "Redis": { "protocol": "tcp", "port": 6379 },
+    "Zabbix_Agent": { "protocol": "tcp", "port": 10050 }
+  },
+  "time_windows": {
+    "Maintenance_Window": "Sun 02:00-06:00"
+  }
+}
+
