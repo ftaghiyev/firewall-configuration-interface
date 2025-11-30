@@ -17,7 +17,7 @@ import {
   NodeResizer,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { JsonView, darkStyles } from "react-json-view-lite";
+import { JsonView, darkStyles, collapseAllNested } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import { Label } from "../ui/label";
 
@@ -25,7 +25,8 @@ interface PipelineGraphProps {
   policyId: string;
   resolverOutput: any;
   irOutput: any;
-  validationWarnings: string[];
+  lintingWarnings: Record<string, string[]>;
+  safetyWarnings: string[];
   batfishWarnings: { severity: string; message: string }[];
   configs: Record<string, string>;
 }
@@ -34,7 +35,8 @@ export default function PipelineGraph({
   policyId,
   resolverOutput,
   irOutput,
-  validationWarnings,
+  lintingWarnings,
+  safetyWarnings,
   batfishWarnings,
   configs,
 }: PipelineGraphProps) {
@@ -61,7 +63,7 @@ export default function PipelineGraph({
       },
       {
         id: "ir",
-        position: { x: 40, y: 340 },
+        position: { x: 40, y: 380 },
         data: {
           label: "IR Builder Output",
           json: irOutput,
@@ -77,28 +79,66 @@ export default function PipelineGraph({
         type: "jsonNode",
       },
       {
-        id: "validation",
-        position: { x: 40, y: 660 },
+        id: "linting",
+        position: { x: 360, y: 660 },
         data: {
           label: "Linter Analysis",
           json:
-            validationWarnings.length > 0
-              ? validationWarnings
+            Object.keys(lintingWarnings).length > 0
+              ? lintingWarnings
               : ["No linter warnings"],
         },
         style: {
           width: nodeWidth,
           padding: 10,
           borderRadius: 8,
-          background: validationWarnings.length > 0 ? "#b45309" : "#065f46",
+          background:
+            Object.keys(lintingWarnings).length > 0 ? "#b45309" : "#065f46",
           color: "#fff",
           border: "1px solid #374151",
         },
         type: "jsonNode",
       },
       {
+        id: "safety",
+        position: { x: 40, y: 800 },
+        data: {
+          label: "Safety Gate",
+          json:
+            safetyWarnings.length > 0 ? safetyWarnings : ["No safety warnings"],
+        },
+        style: {
+          width: nodeWidth,
+          padding: 10,
+          borderRadius: 8,
+          background: safetyWarnings.length > 0 ? "#b45309" : "#065f46",
+          color: "#fff",
+          border: "1px solid #374151",
+        },
+        type: "jsonNode",
+      },
+
+      {
+        id: "configs",
+        position: { x: 40, y: 1000 },
+        data: {
+          label: "Compiled Configurations",
+          json: configs,
+        },
+        style: {
+          width: nodeWidth,
+          padding: 10,
+          borderRadius: 8,
+          background: "#1f2937",
+          color: "#fff",
+          border: "1px solid #374151",
+        },
+        type: "jsonNode",
+      },
+
+      {
         id: "batfish",
-        position: { x: 40, y: 1300 },
+        position: { x: 360, y: 1200 },
         data: {
           label: "Batfish Analysis",
           json:
@@ -121,61 +161,32 @@ export default function PipelineGraph({
         },
         type: "jsonNode",
       },
-      {
-        id: "configs",
-        position: { x: 40, y: 980 },
-        data: {
-          label: "Compiled Configurations",
-          json: configs,
-        },
-        style: {
-          width: nodeWidth,
-          padding: 10,
-          borderRadius: 8,
-          background: "#1f2937",
-          color: "#fff",
-          border: "1px solid #374151",
-        },
-        type: "jsonNode",
-      },
     ],
-    [resolverOutput, irOutput, validationWarnings, batfishWarnings, configs]
+    [
+      resolverOutput,
+      irOutput,
+      lintingWarnings,
+      safetyWarnings,
+      batfishWarnings,
+      configs,
+    ]
   );
 
-  const initialEdges = [
-    {
-      id: "resolver-ir",
-      source: "resolver",
-      target: "ir",
-      type: "smoothstep",
-      animated: true,
-      style: { stroke: "#60a5fa", strokeWidth: 2 },
-    },
-    {
-      id: "ir-validation",
-      source: "ir",
-      target: "validation",
-      type: "smoothstep",
-      animated: true,
-      style: { stroke: "#60a5fa", strokeWidth: 2 },
-    },
-    {
-      id: "configs-batfish",
-      source: "configs",
-      target: "batfish",
-      type: "smoothstep",
-      animated: true,
-      style: { stroke: "#60a5fa", strokeWidth: 2 },
-    },
-    {
-      id: "validation-configs",
-      source: "validation",
-      target: "configs",
-      type: "smoothstep",
-      animated: true,
-      style: { stroke: "#60a5fa", strokeWidth: 2 },
-    },
+  const edgesRaw = [
+    ["resolver", "ir"],
+    ["ir", "linting"],
+    ["ir", "safety"],
+    ["safety", "configs"],
+    ["configs", "batfish"],
   ];
+  const initialEdges = edgesRaw.map(([source, target]) => ({
+    id: `${source}-to-${target}`,
+    source: source,
+    target: target,
+    type: "smoothstep",
+    animated: true,
+    style: { stroke: "#60a5fa", strokeWidth: 2 },
+  }));
 
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
@@ -201,6 +212,12 @@ export default function PipelineGraph({
     jsonNode: JsonNode,
   };
 
+  const initialViewport = {
+    x: 0,
+    y: 0,
+    zoom: 0.8,
+  };
+
   return (
     <div className="w-full h-full">
       <Label>Policy ID: {policyId}</Label>
@@ -212,6 +229,7 @@ export default function PipelineGraph({
         onConnect={onConnect}
         onNodeDrag={onNodeDrag}
         nodeTypes={nodeTypes}
+        defaultViewport={initialViewport}
       >
         <Background color="#333" gap={12} />
         <Controls className="" />
@@ -235,7 +253,11 @@ function JsonNode({ data, selected }: { data: any; selected?: boolean }) {
       <h3 className="text-base mb-1.5">{data.label}</h3>
 
       <div className="nodrag bg-[#111827] p-2 rounded-md overflow-y-auto text-xs flex-1">
-        <JsonView data={data.json} style={darkStyles} />
+        <JsonView
+          data={data.json}
+          style={darkStyles}
+          shouldExpandNode={collapseAllNested}
+        />
       </div>
 
       <Handle type="source" position={Position.Bottom} id="out" />

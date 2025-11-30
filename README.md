@@ -15,23 +15,25 @@ An AI-powered tool for translating natural language policy intents into vendor-s
 The project consists of three main components:
 
 1.  **Backend (`backend/`)**:
-    *   **Engine**: Core logic for intent resolution, IR building, and compilation.
-    *   **Validator**: Linter (`PaloAltoLinter`) for logical checks.
-    *   **Batfish Manager**: Integration with Batfish for configuration validation.
-    *   **API**: FastAPI server exposing endpoints for policy translation.
+
+    - **Engine**: Core logic for intent resolution, IR building, and compilation.
+    - **Linter**: (e.g `PaloAltoLinter`) for logical checks.
+    - **Batfish Manager**: Integration with Batfish for configuration validation.
+    - **API**: FastAPI server exposing endpoints for policy translation.
 
 2.  **Frontend (`frontend/`)**:
-    *   React/Vite application providing a chat interface.
-    *   Visualizes the pipeline steps (Resolver -> IR -> Validation -> Batfish -> Config).
+
+    - React/Vite application providing a chat interface.
+    - Visualizes the pipeline steps (Resolver -> IR -> Validation -> Batfish -> Config).
 
 3.  **Batfish Service**:
-    *   Dockerized Batfish service for network analysis.
+    - Dockerized Batfish service for network analysis.
 
 ## 📦 Prerequisites
 
-*   Python 3.10+
-*   Node.js 18+
-*   Docker (for Batfish)
+- Python 3.10+
+- Node.js 18+
+- Docker (for Batfish)
 
 ## 🏁 Getting Started
 
@@ -40,6 +42,7 @@ The project consists of three main components:
 ```bash
 docker compose up -d
 ```
+
 This starts the Batfish container on ports `8888` and `9996`.
 
 ### 2. Setup Backend
@@ -52,9 +55,11 @@ pip install -r requirements.txt
 ```
 
 Run the server:
+
 ```bash
 fastapi dev src/main.py
 ```
+
 The API will be available at `http://localhost:8000`.
 
 ### 3. Setup Frontend
@@ -64,29 +69,30 @@ cd frontend/interface
 npm install
 npm run dev
 ```
+
 The UI will be available at `http://localhost:5173`.
 
 ## 🧪 Usage
 
 1.  Open the frontend URL.
 2.  Upload a network context file (e.g., `data/prod/payroll-network.json`) or paste your network definitions (Objects, Zones).
-3.  Type your policy intent in the chat (e.g., *"Allow HR_laptops to reach Finance_servers on TCP 443"*).
+3.  Type your policy intent in the chat (e.g., _"Allow HR_laptops to reach Finance_servers on TCP 443"_).
 4.  View the generated pipeline graph:
-    *   **Resolver**: Shows how natural language mapped to your defined objects.
-    *   **IR**: The abstract rule representation.
-    *   **Linter**: Checks for logical errors.
-    *   **Batfish Analysis**: Checks for configuration validity (syntax, references).
-    *   **Config**: The final PAN-OS CLI commands.
+    - **Resolver**: Shows how natural language mapped to your defined objects.
+    - **IR**: The abstract rule representation.
+    - **Linter**: Checks for logical errors.
+    - **Batfish Analysis**: Checks for configuration validity (syntax, references).
+    - **Config**: The final PAN-OS CLI commands.
 
 ## 📂 Project Structure
 
 ```
 .
 ├── backend/                # FastAPI application
-│   ├── src/engine/         # Core logic (Agents, Compiler, Validators)
+│   ├── src/engine/         # Core logic (Agents, Compiler, Linters)
 │   │   ├── batfish/        # Batfish integration logic
 │   │   ├── compiler/       # Vendor-specific compilers (Palo Alto)
-│   │   └── validator/      # Static linters
+│   │   └── linter/      # Static linters
 │   └── routers/            # API endpoints
 ├── frontend/               # React application
 │   └── interface/src/      # UI Components and Hooks
@@ -97,8 +103,8 @@ The UI will be available at `http://localhost:5173`.
 ## 🛡️ Batfish Validation Details
 
 The `BatfishManager` automatically:
-*   Wraps your generated firewall rules with a mock device header (interfaces, zones, virtual routers) based on your context.
-*   Creates dummy objects for FQDNs to bypass Batfish limitations.
-*   Filters out "Unused structure" noise to focus on critical errors.
-*   Enforces a 15-second timeout to prevent UI hangs if the service is unreachable.
 
+- Wraps your generated firewall rules with a mock device header (interfaces, zones, virtual routers) based on your context.
+- Creates dummy objects for FQDNs to bypass Batfish limitations.
+- Filters out "Unused structure" noise to focus on critical errors.
+- Enforces a 15-second timeout to prevent UI hangs if the service is unreachable.

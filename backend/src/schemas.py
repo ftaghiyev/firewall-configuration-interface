@@ -23,6 +23,7 @@ class PolicyTranslateResponse(BaseModel):
     policy_id: str
     resolver_output: ResolverOutput
     ir: IRBuilderOutput
-    validation_warnings: Optional[List[str]] = []
-    batfish_warnings: Optional[List[Dict[str, str]]] = []  # List of { "severity": "warning"|"error", "message": "..." }
+    linting_warnings: Optional[Dict[str, List[str]]] = {}
+    safety_warnings: Optional[List[str]] = []
     configs: Optional[Dict[str, str]] = {}
+    batfish_warnings: Optional[Dict[str, List[Dict[str, str]]]] = {}  # Dictionary of vendor to list of { "severity": "warning"|"error", "message": "..." }

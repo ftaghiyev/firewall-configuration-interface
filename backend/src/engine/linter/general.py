@@ -5,7 +5,7 @@ from ..schemas import IRBuilderOutput
 
 class GeneralIRLinter(IRLinter):
 
-    def validate(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
+    def lint(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         warnings: List[str] = []
         rule_ids = set()
 

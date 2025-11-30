@@ -5,6 +5,6 @@ from ..schemas import IRBuilderOutput
 class IRLinter(ABC):
 
     @abstractmethod
-    def validate(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
+    def lint(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         """Return (is_valid, warnings)."""
         pass

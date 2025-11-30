@@ -17,10 +17,9 @@ import {
 import { useTranslationStore } from "@/features/translation/store";
 import GlobalLayout from "@/layouts/global-layout";
 import { useState } from "react";
-import { LuCopy, LuSend } from "react-icons/lu";
+import { LuSend } from "react-icons/lu";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
-import { Copy } from "lucide-react";
 import CopyButton from "@/components/ui/copy-button";
 
 type Message = {
@@ -32,7 +31,8 @@ type Representation = {
   policy_id: string;
   resolver_output: any;
   ir: any;
-  validation_warnings: string[];
+  linting_warnings: Record<string, string[]>;
+  safety_warnings: string[];
   batfish_warnings: { severity: string; message: string }[];
   configs: Record<string, string>;
 };
@@ -100,9 +100,6 @@ function Chat() {
   return (
     <GlobalLayout>
       <div className="h-full flex">
-        <div className="p-4 min-w-48">
-          <Label> Policy History </Label>
-        </div>
         <ResizablePanelGroup
           direction="horizontal"
           className="h-full rounded-lg border md:min-w-[450px]"
@@ -225,7 +222,8 @@ function Chat() {
                           policyId={rep.policy_id}
                           resolverOutput={rep.resolver_output}
                           irOutput={rep.ir}
-                          validationWarnings={rep.validation_warnings}
+                          lintingWarnings={rep.linting_warnings}
+                          safetyWarnings={rep.safety_warnings}
                           batfishWarnings={rep.batfish_warnings}
                           configs={rep.configs}
                         />

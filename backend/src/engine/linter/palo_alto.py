@@ -27,7 +27,7 @@ def _is_ip_or_cidr(value: str) -> bool:
 
 class PaloAltoLinter(IRLinter):
 
-    def validate(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
+    def lint(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         warnings: List[str] = []
 
         for r in ir.rules:
