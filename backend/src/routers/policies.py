@@ -83,18 +83,21 @@ def translate_policy(payload: schemas.PolicyTranslateRequest):
         print("Safety Errors:", safety_warnings)
 
 
-    # Compilation
-    compiled_outputs = compile_ir_all(ir_result)
-    
+    compiled_outputs = {}
+    bf_warnings_all  = {}
 
-    # Batfish Validation
-    bf_warnings_all = {}
-    for vendor, config in compiled_outputs.items():
+    if is_safe:
+        # Compilation
+        compiled_outputs = compile_ir_all(ir_result)
+        
+        # Batfish Validation
+        bf_warnings_all = {}
+        for vendor, config in compiled_outputs.items():
 
-        batfish_manager = BatfishManager()
-        bf_warnings = batfish_manager.validate(config, context=cached["context"])
+            batfish_manager = BatfishManager()
+            bf_warnings = batfish_manager.validate(config, context=cached["context"])
 
-        bf_warnings_all[vendor] = bf_warnings
+            bf_warnings_all[vendor] = bf_warnings
 
 
     return schemas.PolicyTranslateResponse(
