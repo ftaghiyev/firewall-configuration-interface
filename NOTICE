@@ -1,0 +1,28 @@
+DIVAR: Natural-Language Interface for Firewall Configuration
+Copyright (c) 2025 Farid Taghiyev and Ali Aslanbayli
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+This project was developed as part of the "AI for Network Analysis" course.
+
+If you use this software or ideas from it in your own work or projects,
+please acknowledge:
+
+    "DIVAR: Natural-Language Interface for Firewall Configuration,
+     by Farid Taghiyev and Ali [Last Name], 2025."
+
+## Third-Party Components
+
+Batfish and pybatfish
+Copyright (c) The Batfish Project
+Licensed under the Apache License, Version 2.0
+
+Batfish project website:
+https://www.batfish.org/
+
+Batfish source code:
+https://github.com/batfish/batfish

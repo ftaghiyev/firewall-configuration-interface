@@ -112,3 +112,9 @@ The `BatfishManager` automatically:
 - Creates dummy objects for FQDNs to bypass Batfish limitations.
 - Filters out "Unused structure" noise to focus on critical errors.
 - Enforces a 15-second timeout to prevent UI hangs if the service is unreachable.
+
+## Acknowledgements
+
+This project uses [Batfish](https://www.batfish.org/) and the `pybatfish` client
+library for offline validation of generated firewall configurations.
+Batfish is licensed under the Apache License, Version 2.0.
