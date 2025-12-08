@@ -32,7 +32,7 @@ interface PipelineGraphProps {
   irOutput: any;
   lintingWarnings: Record<string, string[]>;
   safetyWarnings: string[];
-  batfishWarnings: { severity: string; message: string }[];
+  batfishWarnings: Record<string, { severity: string; message: string }[]>;
   configs: Record<string, string>;
 }
 
@@ -153,7 +153,12 @@ export default function PipelineGraph({
           width: nodeWidth,
           padding: 10,
           borderRadius: 8,
-          background: safetyWarnings.length > 0 ? "#b45309" : "#065f46",
+          background:
+            safetyWarnings.length > 0
+              ? safetyWarnings.some((w) => w.includes("ERROR"))
+                ? "#7f1d1d" // Red for errors
+                : "#b45309" // Orange for warnings
+              : "#065f46", // Green for success
           color: "#fff",
           border: "1px solid #374151",
         },
@@ -184,7 +189,7 @@ export default function PipelineGraph({
         data: {
           label: "Batfish Analysis",
           json:
-            batfishWarnings && batfishWarnings.length > 0
+            batfishWarnings && Object.keys(batfishWarnings).length > 0
               ? batfishWarnings
               : ["Batfish validation successful"],
         },
@@ -193,8 +198,10 @@ export default function PipelineGraph({
           padding: 10,
           borderRadius: 8,
           background:
-            batfishWarnings && batfishWarnings.length > 0
-              ? batfishWarnings.some((w) => w.severity === "error")
+            batfishWarnings && Object.keys(batfishWarnings).length > 0
+              ? Object.values(batfishWarnings)
+                  .flat()
+                  .some((w) => w.severity === "error")
                 ? "#7f1d1d" // Red for errors
                 : "#b45309" // Orange for warnings
               : "#065f46", // Green for success

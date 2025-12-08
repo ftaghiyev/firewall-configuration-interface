@@ -1,0 +1,10 @@
+Allow public internet access to the Web_Cluster_Public on HTTP and HTTPS.
+Enable the App_Server_Private to connect to the DB_Cluster_Primary using Postgres.
+Allow the App_Server_Private to access the Redis_Cache using Redis.
+Permit the Admin_Jumpbox to SSH into App_Server_Private.
+Allow the Monitoring_System to access Web_Cluster_Public using Zabbix_Agent.
+Allow Office_VPN_Pool to SSH into the Admin_Jumpbox.
+During the Maintenance_Window, allow the Admin_Jumpbox access to the DB_Cluster_Primary on Postgres.
+Allow the Web_Cluster_Public to access Any_Internet on HTTP and HTTPS.
+Permit the DB_Cluster_Replica to sync with the DB_Cluster_Primary on Postgres.
+Block traffic from Any_Internet to DB_Cluster_Primary.

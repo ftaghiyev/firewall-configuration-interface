@@ -1,0 +1,10 @@
+Allow the Scada_Server to communicate with PLC_Controller_Line1 using Modbus_TCP.
+Permit the Engineering_Workstation to access HMI_Panel_Line1 using RDP.
+Allow the Historian_DB to retrieve data from the Scada_Server using OPC_UA.
+Allow the Vendor_VPN_Gateway to access PLC_Controller_Line1 via Modbus_TCP.
+Strictly deny all traffic from the Corporate_User_Net to the PLC_Controller_Line1.
+Allow Corporate_User_Net to access Historian_DB via HTTPS.
+Allow the Engineering_Workstation access to PLC_Controller_Line1 using Modbus_TCP during Shift_1.
+Block any traffic from the PLC_Controller_Line1 to the Internet.
+Allow HMI_Panel_Line1 to communicate with PLC_Controller_Line1 using Modbus_TCP.
+Allow the Vendor_VPN_Gateway to access the Engineering_Workstation via RDP.

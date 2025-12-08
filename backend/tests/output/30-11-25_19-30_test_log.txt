@@ -1,0 +1,178 @@
+Test Run: 30-11-25_19-30
+==================================================
+
+TEST CASE: medium_partner_vpn
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_printer_access
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_public_web
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: simple_3_iot_mqtt
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: simple_3_firmware_update
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_3_cicd_deploy
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_3_prod_db_maintenance
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 94.89%)
+EXPECTED CLI:
+set rulebase security rules r1 from Development
+set rulebase security rules r1 to Production
+set rulebase security rules r1 source Dev_Subnet
+set rulebase security rules r1 destination Prod_DB
+set rulebase security rules r1 service tcp_5432
+set rulebase security rules r1 action allow
+set rulebase security rules r1 schedule Maintenance_Window
+ACTUAL CLI:
+set rulebase security rules r1 from Development
+set rulebase security rules r1 to Production
+set rulebase security rules r1 source Dev_Subnet
+set rulebase security rules r1 destination Prod_DB
+set rulebase security rules r1 service tcp_5432
+set rulebase security rules r1 action allow
+set rulebase security rules r1 schedule "Sun 02:00-06:00"
+
+TEST CASE: complex_block_malicious
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 98.24%)
+EXPECTED CLI:
+set rulebase security rules r1 from Untrust
+set rulebase security rules r1 to Any
+set rulebase security rules r1 source Malicious_IPs
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service application-default
+set rulebase security rules r1 action deny
+ACTUAL CLI:
+set rulebase security rules r1 from Untrust
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Malicious_IPs
+set rulebase security rules r1 destination Any
+set rulebase security rules r1 service application-default
+set rulebase security rules r1 action deny
+
+TEST CASE: complex_hq_pci
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_guest_internet
+------------------------------
+STATUS: PASS
+
+TEST CASE: medium_2_voip
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: medium_2_video_conf
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: simple_2_guest_access
+------------------------------
+WARNING: IR Mismatch
+STATUS: FAIL (Similarity: 95.56%)
+EXPECTED CLI:
+set rulebase security rules r1 from Guest
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Guest_WiFi
+set rulebase security rules r1 destination Internet
+set rulebase security rules r1 service tcp_80
+set rulebase security rules r1 action allow
+set rulebase security rules r1 schedule Guest_Hours
+
+set rulebase security rules r2 from Guest
+set rulebase security rules r2 to Untrust
+set rulebase security rules r2 source Guest_WiFi
+set rulebase security rules r2 destination Internet
+set rulebase security rules r2 service application-default
+set rulebase security rules r2 action allow
+set rulebase security rules r2 schedule Guest_Hours
+ACTUAL CLI:
+set rulebase security rules r1 from Guest
+set rulebase security rules r1 to Untrust
+set rulebase security rules r1 source Guest_WiFi
+set rulebase security rules r1 destination Internet
+set rulebase security rules r1 service tcp_80
+set rulebase security rules r1 action allow
+set rulebase security rules r1 schedule "Daily 08:00-20:00"
+
+set rulebase security rules r2 from Guest
+set rulebase security rules r2 to Untrust
+set rulebase security rules r2 source Guest_WiFi
+set rulebase security rules r2 destination Internet
+set rulebase security rules r2 service application-default
+set rulebase security rules r2 action allow
+set rulebase security rules r2 schedule "Daily 08:00-20:00"
+
+TEST CASE: simple_2_vpn_access
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_2_hybrid_ad
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_2_remote_vpn
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: simple_http_outbound
+------------------------------
+STATUS: PASS
+
+TEST CASE: simple_https_outbound
+------------------------------
+STATUS: PASS
+
+TEST CASE: simple_deny_inbound
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_3_tenant_isolation
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+TEST CASE: complex_3_backup
+------------------------------
+WARNING: IR Mismatch
+STATUS: PASS
+
+==================================================
+SUMMARY
+==================================================
+Total: 21
+Passed: 18
+Failed: 3
+
+FAILED CASES:
+- medium_3_prod_db_maintenance
+- complex_block_malicious
+- simple_2_guest_access

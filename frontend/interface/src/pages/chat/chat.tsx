@@ -33,7 +33,7 @@ type Representation = {
   ir: any;
   linting_warnings: Record<string, string[]>;
   safety_warnings: string[];
-  batfish_warnings: { severity: string; message: string }[];
+  batfish_warnings: Record<string, { severity: string; message: string }[]>;
   configs: Record<string, string>;
 };
 

@@ -2,13 +2,17 @@ from typing import List, Tuple
 from .base import SafetyGate
 from ..schemas import IRBuilderOutput
 
-GLOBAL_ANY = {"any", "0.0.0.0/0", "*"}
+GLOBAL_ANY = {"any", "0.0.0.0/0", "*", "internet"}
 
 
 class FirewallSafetyGate(SafetyGate):
 
     def enforce(self, ir: IRBuilderOutput) -> Tuple[bool, List[str]]:
         errors: List[str] = []
+
+        if not ir.rules:
+            errors.append("ERROR: No rules were generated. The policy might be invalid or empty.")
+            return False, errors
 
         for r in ir.rules:
 

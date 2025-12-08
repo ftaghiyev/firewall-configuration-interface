@@ -1,0 +1,9 @@
+Allow HR_laptops to access the PAYROLL_SAAS via HTTPS.
+Permit Finance_servers to access the INTERNET using HTTP and HTTPS.
+Block HR_laptops from accessing the Finance_servers.
+Allow HR_laptops to access INTERNET on HTTP and HTTPS.
+Allow Finance_servers to connect to the PAYROLL_SAAS on HTTPS during business-hours.
+Block all traffic from Finance_servers to INTERNET during night.
+Allow Finance_servers to access HR_laptops on HTTPS.
+Deny access from the INTERNET to Finance_servers.
+Allow HR_laptops to access INTERNET using DNS.

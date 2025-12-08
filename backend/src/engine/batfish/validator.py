@@ -109,6 +109,9 @@ class BatfishManager:
                      If provided, header configurations will be generated from this.
             filename: The name of the file to be simulated.
         """
+        if not config_content or not config_content.strip():
+             return [{"severity": "warning", "message": "No configuration content provided for validation."}]
+
         if not self.enabled:
             return [{"severity": "error", "message": "Batfish validation skipped: pybatfish not installed."}]
 
