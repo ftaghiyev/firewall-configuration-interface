@@ -120,3 +120,7 @@ library for offline validation of generated firewall configurations.
 Batfish is licensed under the Apache License, Version 2.0.
 
 If you use this project, please feel free to cite: https://arxiv.org/abs/2512.10789
+
+## Articles
+
+https://www.helpnetsecurity.com/2026/01/06/research-natural-language-firewall-configuration/
